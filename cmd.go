@@ -16,7 +16,7 @@ func init() {
 
 var rootCmd = &cobra.Command{
 	Use:   "winremote",
-	Short: "Turn off/hibernate/sleep/lock your computer remotely via HTTP",
+	Short: "Turn off/restart/hibernate/sleep/lock your computer remotely via HTTP",
 	Run: func(cmd *cobra.Command, args []string) {
 		inService, err := svc.IsWindowsService()
 		if err != nil {
