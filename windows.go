@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"os/exec"
 )
 
@@ -10,11 +9,8 @@ func lock() error {
 	return err
 }
 
-func sleep() error {
-	return errors.New("sleep is not implemented yet")
-}
-
-func hibernate() error {
+func sleepOrHibernate() error {
+	// NOTE: if hibernation is off this will sleep the computer else hibernate it.
 	_, err := exec.Command("rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0").Output()
 	return err
 }
@@ -24,7 +20,7 @@ func restart() error {
 	return err
 }
 
-func turnOff() error {
+func shutdown() error {
 	// Using the /f switch to force close all the running application.
 	_, err := exec.Command("shutdown", "/s", "/f").Output()
 	return err
