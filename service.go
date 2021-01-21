@@ -4,9 +4,19 @@ import (
 	"fmt"
 	"os"
 
+	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/debug"
 	"golang.org/x/sys/windows/svc/eventlog"
 	"golang.org/x/sys/windows/svc/mgr"
 )
+
+var elog debug.Log
+
+type winremoteService struct{}
+
+func (wrs *winremoteService) Execute(args []string, r <-chan svc.ChangeRequest, changes chan<- svc.Status) (ssec bool, errno uint32) {
+	return
+}
 
 func installService(name, displayName string) error {
 	exepath := os.Args[0]
