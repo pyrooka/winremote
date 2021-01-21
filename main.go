@@ -1,11 +1,11 @@
 package main
 
 import (
-	"os"
+	"log"
 )
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
