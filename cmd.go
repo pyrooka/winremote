@@ -12,6 +12,7 @@ const serviceName = "winremote"
 func init() {
 	rootCmd.AddCommand(installCmd)
 	rootCmd.AddCommand(uninstallCmd)
+	rootCmd.AddCommand(startCmd)
 }
 
 var rootCmd = &cobra.Command{
@@ -46,6 +47,16 @@ var uninstallCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := uninstallService(serviceName); err != nil {
 			log.Fatalf("Cannot uninstall the %s service: %s", serviceName, err)
+		}
+	},
+}
+
+var startCmd = &cobra.Command{
+	Use:   "start",
+	Short: "Start the service",
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := startService(serviceName); err != nil {
+			log.Fatalf("Cannot start the %s service: %s", serviceName, err)
 		}
 	},
 }

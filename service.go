@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/debug"
@@ -16,6 +17,12 @@ type winremoteService struct{}
 
 func (wrs *winremoteService) Execute(args []string, r <-chan svc.ChangeRequest, changes chan<- svc.Status) (ssec bool, errno uint32) {
 	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
+	changes <- svc.Status{State: svc.StartPending}
+	err := listen()
+	if err != nil {
+		elog.Error(1, fmt.Sprintf("cannot start the webserver %v", err))
+		return
+	}
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 
 loop:
@@ -24,20 +31,25 @@ loop:
 		case c := <-r:
 			switch c.Cmd {
 			case svc.Interrogate:
-				return
+				changes <- c.CurrentStatus
+				// Testing deadlock from https://code.google.com/p/winsvc/issues/detail?id=4
+				time.Sleep(100 * time.Millisecond)
+				changes <- c.CurrentStatus
 			case svc.Stop, svc.Shutdown:
 				break loop
 			case svc.Pause:
-				return
+				break loop
 			case svc.Continue:
-				return
+				break loop
 			default:
 				elog.Error(1, fmt.Sprintf("unexpected control request #%d", c))
 			}
 		}
-
-		return
 	}
+
+	changes <- svc.Status{State: svc.StopPending}
+
+	return
 }
 
 func installService(name, displayName string) error {
@@ -95,6 +107,24 @@ func uninstallService(name string) error {
 	err = eventlog.Remove(name)
 	if err != nil {
 		return fmt.Errorf("RemoveEventLogSource() failed: %s", err)
+	}
+	return nil
+}
+
+func startService(name string) error {
+	m, err := mgr.Connect()
+	if err != nil {
+		return err
+	}
+	defer m.Disconnect()
+	s, err := m.OpenService(name)
+	if err != nil {
+		return fmt.Errorf("could not access service: %v", err)
+	}
+	defer s.Close()
+	err = s.Start("is", "manual-started")
+	if err != nil {
+		return fmt.Errorf("could not start service: %v", err)
 	}
 	return nil
 }
