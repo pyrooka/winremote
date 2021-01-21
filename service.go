@@ -15,7 +15,29 @@ var elog debug.Log
 type winremoteService struct{}
 
 func (wrs *winremoteService) Execute(args []string, r <-chan svc.ChangeRequest, changes chan<- svc.Status) (ssec bool, errno uint32) {
-	return
+	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
+	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
+
+loop:
+	for {
+		select {
+		case c := <-r:
+			switch c.Cmd {
+			case svc.Interrogate:
+				return
+			case svc.Stop, svc.Shutdown:
+				break loop
+			case svc.Pause:
+				return
+			case svc.Continue:
+				return
+			default:
+				elog.Error(1, fmt.Sprintf("unexpected control request #%d", c))
+			}
+		}
+
+		return
+	}
 }
 
 func installService(name, displayName string) error {
