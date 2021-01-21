@@ -7,6 +7,7 @@
 ## TODO
 - token auth
 - install/uninstall copy the executable to e.g. sys32 and run from there
+- webserver config
 
 ## Credits
 - service: https://github.com/golang/sys/tree/master/windows/svc/example
