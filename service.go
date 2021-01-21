@@ -66,3 +66,22 @@ func uninstallService(name string) error {
 	}
 	return nil
 }
+
+func runService(name string) {
+	// Init the event log.
+	elog, err := eventlog.Open(name)
+	if err != nil {
+		return
+	}
+	defer elog.Close()
+
+	elog.Info(1, fmt.Sprintf("starting %s service", name))
+
+	err = svc.Run(name, &winremoteService{})
+	if err != nil {
+		elog.Error(1, fmt.Sprintf("%s service failed: %v", name, err))
+		return
+	}
+
+	elog.Info(1, fmt.Sprintf("%s service stopped", name))
+}
