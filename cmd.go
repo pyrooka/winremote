@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -18,9 +16,6 @@ func init() {
 var rootCmd = &cobra.Command{
 	Use:   "winremote",
 	Short: "Turn off/hibernate/sleep/lock your computer remotely via HTTP",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(os.Args)
-	},
 }
 
 var installCmd = &cobra.Command{
@@ -40,37 +35,5 @@ var uninstallCmd = &cobra.Command{
 		if err := uninstallService(name); err != nil {
 			log.Fatalf("Cannot uninstall the %s service: %s", name, err)
 		}
-	},
-}
-
-var startCmd = &cobra.Command{
-	Use:   "start",
-	Short: "Start the service",
-	Run: func(cmd *cobra.Command, args []string) {
-
-	},
-}
-
-var stopCmd = &cobra.Command{
-	Use:   "stop",
-	Short: "Stop the service",
-	Run: func(cmd *cobra.Command, args []string) {
-
-	},
-}
-
-var pauseCmd = &cobra.Command{
-	Use:   "pause",
-	Short: "Pause the service",
-	Run: func(cmd *cobra.Command, args []string) {
-
-	},
-}
-
-var continueCmd = &cobra.Command{
-	Use:   "continue",
-	Short: "Continue the service",
-	Run: func(cmd *cobra.Command, args []string) {
-
 	},
 }
