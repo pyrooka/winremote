@@ -36,7 +36,7 @@ var installCmd = &cobra.Command{
 	Short: "Install the service",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := installService(serviceName, serviceName); err != nil {
-			log.Fatalf("Cannot install the %s service: %s", serviceName, err)
+			log.Fatalf("Cannot install the %s service: %v", serviceName, err)
 		}
 	},
 }
@@ -46,7 +46,7 @@ var uninstallCmd = &cobra.Command{
 	Short: "Uninstall the service",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := uninstallService(serviceName); err != nil {
-			log.Fatalf("Cannot uninstall the %s service: %s", serviceName, err)
+			log.Fatalf("Cannot uninstall the %s service: %v", serviceName, err)
 		}
 	},
 }
@@ -56,7 +56,7 @@ var startCmd = &cobra.Command{
 	Short: "Start the service",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := startService(serviceName); err != nil {
-			log.Fatalf("Cannot start the %s service: %s", serviceName, err)
+			log.Fatalf("Cannot start the %s service: %v", serviceName, err)
 		}
 	},
 }
