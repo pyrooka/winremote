@@ -4,9 +4,10 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/sys/windows/svc"
 )
 
-const name = "winremote"
+const serviceName = "winremote"
 
 func init() {
 	rootCmd.AddCommand(installCmd)
@@ -16,14 +17,25 @@ func init() {
 var rootCmd = &cobra.Command{
 	Use:   "winremote",
 	Short: "Turn off/hibernate/sleep/lock your computer remotely via HTTP",
+	Run: func(cmd *cobra.Command, args []string) {
+		inService, err := svc.IsWindowsService()
+		if err != nil {
+			log.Fatalf("Failed to determine if we are running in service: %v", err)
+			return
+		}
+		if inService {
+			runService(serviceName)
+			return
+		}
+	},
 }
 
 var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "Install the service",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := installService(name, name); err != nil {
-			log.Fatalf("Cannot install the %s service: %s", name, err)
+		if err := installService(serviceName, serviceName); err != nil {
+			log.Fatalf("Cannot install the %s service: %s", serviceName, err)
 		}
 	},
 }
@@ -32,8 +44,8 @@ var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
 	Short: "Uninstall the service",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := uninstallService(name); err != nil {
-			log.Fatalf("Cannot uninstall the %s service: %s", name, err)
+		if err := uninstallService(serviceName); err != nil {
+			log.Fatalf("Cannot uninstall the %s service: %s", serviceName, err)
 		}
 	},
 }
