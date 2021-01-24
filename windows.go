@@ -4,11 +4,6 @@ import (
 	"os/exec"
 )
 
-func lock() error {
-	_, err := exec.Command("rundll32.exe", "user32.dll,LockWorkStation").Output()
-	return err
-}
-
 func sleepOrHibernate() error {
 	// NOTE: if hibernation is off this will sleep the computer else hibernate it.
 	_, err := exec.Command("rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0").Output()

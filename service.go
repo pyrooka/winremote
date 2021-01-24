@@ -69,7 +69,7 @@ func installService(name, displayName string) error {
 	svcConfig := mgr.Config{
 		DisplayName: displayName,
 		StartType:   mgr.StartAutomatic,
-		Description: "Turn off/lock/sleep/hibernate your computer remotely via HTTP.",
+		Description: "Turn off/sleep/hibernate your computer remotely via HTTP.",
 	}
 
 	s, err = m.CreateService(name, exepath, svcConfig, "is", "auto-started")

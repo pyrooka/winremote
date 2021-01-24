@@ -5,13 +5,6 @@ import (
 	"net/http"
 )
 
-func lockHandler(w http.ResponseWriter, r *http.Request) {
-	err := lock()
-	if err != nil {
-		elog.Error(1, fmt.Sprintf("failed to lock the computer: %v", err))
-	}
-}
-
 func sleepOrHibernateHandler(w http.ResponseWriter, r *http.Request) {
 	err := sleepOrHibernate()
 	if err != nil {
@@ -34,7 +27,6 @@ func restartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func listen() error {
-	http.HandleFunc("/lock", lockHandler)
 	http.HandleFunc("/sleep", sleepOrHibernateHandler)
 	http.HandleFunc("/shutdown", shutdownHandler)
 	http.HandleFunc("/restart", restartHandler)
