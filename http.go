@@ -26,10 +26,13 @@ func restartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func listen() error {
+func listen() {
 	http.HandleFunc("/sleep", sleepOrHibernateHandler)
 	http.HandleFunc("/shutdown", shutdownHandler)
 	http.HandleFunc("/restart", restartHandler)
 
-	return http.ListenAndServe(":8899", nil)
+	err := http.ListenAndServe(":8899", nil)
+	if err != nil {
+		elog.Error(1, fmt.Sprintf("cannot start the webserver %v", err))
+	}
 }

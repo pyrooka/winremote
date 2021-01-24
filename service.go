@@ -16,13 +16,9 @@ var elog debug.Log
 type winremoteService struct{}
 
 func (wrs *winremoteService) Execute(args []string, r <-chan svc.ChangeRequest, changes chan<- svc.Status) (ssec bool, errno uint32) {
-	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
+	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown
 	changes <- svc.Status{State: svc.StartPending}
-	err := listen()
-	if err != nil {
-		elog.Error(1, fmt.Sprintf("cannot start the webserver %v", err))
-		return
-	}
+	go listen()
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 
 loop:
@@ -36,10 +32,6 @@ loop:
 				time.Sleep(100 * time.Millisecond)
 				changes <- c.CurrentStatus
 			case svc.Stop, svc.Shutdown:
-				break loop
-			case svc.Pause:
-				break loop
-			case svc.Continue:
 				break loop
 			default:
 				elog.Error(1, fmt.Sprintf("unexpected control request #%d", c))
