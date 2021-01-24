@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -27,6 +28,11 @@ var rootCmd = &cobra.Command{
 			runService(serviceName)
 			return
 		}
+
+		fmt.Println("Please install the service!")
+		fmt.Println() // Just a newline.
+		cmd.Usage()
+		return
 	},
 }
 
