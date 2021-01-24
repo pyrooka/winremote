@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
-	"golang.org/x/sys/windows/svc"
 )
 
 const serviceName = "winremote"
@@ -18,22 +16,6 @@ func init() {
 var rootCmd = &cobra.Command{
 	Use:   "winremote",
 	Short: "Turn off/restart/hibernate/sleep your computer remotely via HTTP",
-	Run: func(cmd *cobra.Command, args []string) {
-		inService, err := svc.IsWindowsService()
-		if err != nil {
-			log.Fatalf("Failed to determine if we are running in service: %v", err)
-			return
-		}
-		if inService {
-			runService(serviceName)
-			return
-		}
-
-		fmt.Println("Please install the service!")
-		fmt.Println() // Just a newline.
-		cmd.Usage()
-		return
-	},
 }
 
 var installCmd = &cobra.Command{
