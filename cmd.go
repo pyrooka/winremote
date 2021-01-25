@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const serviceName = "winremote"
-
 func init() {
 	rootCmd.AddCommand(installCmd)
 	rootCmd.AddCommand(uninstallCmd)

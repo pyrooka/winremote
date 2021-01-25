@@ -11,6 +11,8 @@ import (
 	"golang.org/x/sys/windows/svc/mgr"
 )
 
+const serviceName = "Winremote"
+
 var elog debug.Log
 
 type winremoteService struct{}
