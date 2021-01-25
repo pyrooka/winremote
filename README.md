@@ -1,15 +1,13 @@
 # Winremote
 
-Remotely sleep/hibernate/restart/shutdown your Windows PC via HTTP GET request.
+Winremote is a simple windows service to remotely sleep/hibernate/restart/shutdown your Windows PC via HTTP GET request.
 
-I have made this little tool to let my [Home Assistant](https://www.home-assistant.io/) hibernate my computer.
+I have made this to make my [Home Assistant](https://www.home-assistant.io/) able to hibernate my computer.
 
 ## Usage
-- `.\winremote.exe install`: install the service
-- `.\winremote.exe uninstall`: uninstall the service
-
-## Note
-If you have firewall enabled, you have to create a rule to allow incoming TCP connections on the specific port.
+1. `.\winremote.exe install`: install the service
+2. Create a new firefall rule if enabled: `New-NetFirewallRule -DisplayName "Winremote" -Direction Inbound -Protocol TCP -LocalPort 8899 -RemoteAddress LocalSubnet -Action Allow`
+3. Start the service manually (or it will start on the next boot)
 
 ## TODO
 - token auth
