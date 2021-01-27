@@ -15,6 +15,7 @@ I have made this to make my [Home Assistant](https://www.home-assistant.io/) abl
 - webserver config
 
 ## Home Assistant config example
+https://www.home-assistant.io/integrations/wake_on_lan/#examples
 ```yaml
 switch:
   - platform: wake_on_lan
