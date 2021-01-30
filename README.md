@@ -19,13 +19,13 @@ https://www.home-assistant.io/integrations/wake_on_lan/#examples
 ```yaml
 switch:
   - platform: wake_on_lan
-    name: "TARGET"
+    name: PC
     ...
     turn_off:
-      service: shell_command.turn_off_TARGET
+      service: shell_command.hibernate_PC
 
 shell_command:
-  turn_off_TARGET: 'ssh hass@TARGET sudo pm-suspend'
+  hibernate_PC: 'curl http://192.168.0.2:8899/sleep'
 ```
 
 ## Credits
